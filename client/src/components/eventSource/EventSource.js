@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 
 
-const LongPulling = () => {
+const EventSource1 = () => {
 
   const [messages, setMessages] = useState([])
   const [value, setValue] = useState("")
@@ -11,16 +11,15 @@ const LongPulling = () => {
     sub()
   }, [])
 
+  //Получение сообщений
   const sub = async () => {
-    try {
-      const {data} = await axios.get('http://localhost:5000/get-messages')
-      console.log(data)
+    console.log('qwe')
+    const eventSource = new EventSource('http://localhost:5000/connect')
+    eventSource.onmessage = function(event) {
+      const data = JSON.parse(event.data)
       setMessages(prev => [data, ...prev])
-      await sub()
-    } catch (e) {
-      setTimeout(() => {
-        sub()
-      }, 500)
+      console.log(data)
+       
     }
   }
 
@@ -40,7 +39,7 @@ const LongPulling = () => {
     setValue('')
     await axios.post('http://localhost:5000/new-messages', {
       message,
-      id: Date.now()
+      key: Date.now()
     })
     
   
@@ -67,4 +66,4 @@ const LongPulling = () => {
   );
 };
 
-export default LongPulling;
+export default EventSource1;
