@@ -11,6 +11,7 @@ const EventSource1 = () => {
     sub()
   }, [])
 
+  //Получение сообщений
   const sub = async () => {
     console.log('qwe')
     const eventSource = new EventSource('http://localhost:5000/connect')
